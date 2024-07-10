@@ -52,6 +52,14 @@ jobs:
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
       - name: Install Docsy
         run: npm install --save-dev docsy
+      - name: Set custom domain
+        run: |
+          mkdir -p ./public
+          if [[ "${{ github.ref_name }}" != "main" ]]; then
+            echo "v${{ github.ref_name }}.taydenwhite.github.io/docsy" > ./public/CNAME
+          else
+            echo "taydenwhite.github.io/docsy" > ./public/CNAME
+          fi
       - name: Build with Hugo
         env:
           # For maximum backward compatibility with Hugo modules
@@ -79,20 +87,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  # Update custom URL job
-  update-url:
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Set custom domain
-        run: |
-          if [[ "${{ github.ref_name }}" != "main" ]]; then
-            echo "v${{ github.ref_name }}.taydenwhite.github.io/docsy" > ./public/CNAME
-          else
-            echo "taydenwhite.github.io/docsy" > ./public/CNAME
-          fi
-      - name: Upload custom domain
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public/CNAME
