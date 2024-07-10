@@ -52,14 +52,6 @@ jobs:
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
       - name: Install Docsy
         run: npm install --save-dev docsy
-      - name: Set custom domain
-        run: |
-          mkdir -p ./public
-          if [[ "${{ github.ref_name }}" != "main" ]]; then
-            echo "v${{ github.ref_name }}.taydenwhite.github.io/docsy" > ./public/CNAME
-          else
-            echo "taydenwhite.github.io/docsy" > ./public/CNAME
-          fi
       - name: Build with Hugo
         env:
           # For maximum backward compatibility with Hugo modules
@@ -71,6 +63,12 @@ jobs:
             --gc \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: Move build to branch-specific folder
+        run: |
+          if [[ "${{ github.ref_name }}" != "main" ]]; then
+            mkdir -p public/v${{ github.ref_name }}
+            mv public/* public/v${{ github.ref_name }}
+          fi
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
