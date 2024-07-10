@@ -118,6 +118,15 @@ params:
   # current doc set.
   version: 0.0
 
+  versions:
+    - version: master
+      githubbranch: main
+      url: 'https://taydenwhite.github.io/version-control'
+    - version: v0
+      githubbranch: v0-branch
+      url: 'https://taydenwhite.github.io/v0/version-control'
+
+
   # A link to latest version of the docs. Used in the "version-banner" partial to
   # point people to the main doc site.
   url_latest_version: https://example.com
@@ -145,7 +154,7 @@ params:
   prism_syntax_highlighting: false
 
   copyright:
-    authors: Docsy Authors | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
+    authors: Tayden White | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
     from_year: 2018
 
   # User interface configuration
